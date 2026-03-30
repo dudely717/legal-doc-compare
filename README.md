@@ -1,1 +1,87 @@
 # legal-doc-compare
+
+适用于 [Claude Code](https://claude.ai/code) 的 PE/VC 法律文件跨轮次对比分析 skill，面向非诉律师和法务人员。
+
+## 功能简介
+
+- **自动制备对比版**：仅提供前后两版净文本即可，自动生成 diff 标注版
+- **修订登记**：区分实质修订、主体扩展（机制不变）、数据变更，强制前置登记防止遗漏
+- **客户持仓识别**：从 SHA 附表 / captable 自动提取客户具体持仓，确保所有优劣判断落实到具体系列和比例
+- **法律分析**：结合谈判立场（强势 / 中立 / 弱势）对每处实质修订出具风险等级与谈判建议
+- **数据完整性核验**：自动核查注册资本加总、持股比例、认购单价、估值自洽等
+- **矛盾条款核查**：跨文件比对，识别 SPA、SHA、章程等文件间的条款冲突
+- **简式总结输出**：固定章节结构，以 .docx 格式交付，含修订登记表附录
+
+## 文件结构
+
+```
+legal-doc-compare/
+├── commands/
+│   └── doc-compare.md          # skill 主文件（放入 ~/.claude/commands/）
+├── templates/
+│   └── doc-compare-summary.md  # 简式总结输出模板（放入 ~/.claude/templates/）
+└── scripts/
+    └── verify-doc-compare.py   # 报告完整性验证脚本（放入 ~/.claude/scripts/）
+```
+
+## 安装方法
+
+将三个文件复制到对应的 Claude Code 配置目录：
+
+```bash
+cp commands/doc-compare.md ~/.claude/commands/
+cp templates/doc-compare-summary.md ~/.claude/templates/
+cp scripts/verify-doc-compare.py ~/.claude/scripts/
+```
+
+## 配置 PE/VC Playbook（必须）
+
+本 skill 在法律分析环节会与使用者自备的 PE/VC Playbook 进行比对。你需要：
+
+1. 准备一份 `pevc-playbook.md`，记录你在各类条款（反稀释、优先清算、回购权等）上的标准立场与红线
+2. 将文件放置在 `~/.claude/pevc-playbook.md`（或自定义路径）
+3. 在 `doc-compare.md` 第 4.3 节中更新引用路径
+
+若未配置 Playbook，skill 仍可正常运行，但 Playbook 比对环节将无法执行。
+
+## 使用方式
+
+在 Claude Code 中触发以下任意关键词即可自动调用：
+
+> "对比"、"比较"、"前后轮"、"修订了哪些"、"有什么变化"、"审阅（含多版本文件）"
+
+或直接执行：
+
+```
+/doc-compare
+```
+
+## 支持的输入格式
+
+- 已有对比版（含 `[INS]` / `[DEL]` 标注的 .docx）
+- 前后两版净文本（PDF、DOCX、TXT 均可），skill 自动制备 diff 版
+
+## 验证脚本
+
+`verify-doc-compare.py` 用于核查报告完整性，支持双向核查：
+
+```bash
+python3 ~/.claude/scripts/verify-doc-compare.py \
+  --report <报告.md> \
+  --docs <对比版文件夹路径>
+```
+
+- **正向核查**：对比文件有修订 → 报告中是否覆盖
+- **反向核查**：报告中分析的条款 → 对比文件是否有修订支撑
+
+依赖：`lxml`（`pip install lxml`）
+
+## 适用场景
+
+- PE/VC 投资：SPA、SHA、股东协议、公司章程跨轮次对比
+- 投后管理：修订版文件与原版比对
+- 重组 / 上市前整改：全套文件修订总结
+
+## License
+
+MIT
