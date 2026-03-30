@@ -24,8 +24,10 @@ legal-doc-compare/
     └── verify-doc-compare.py   # 报告完整性验证脚本（放入 ~/.claude/scripts/）
 ```
 
-## 安装方法
-
+## 安装方法                                                                                           
+                                                            
+前提：已安装 [Claude Code](https://claude.ai/code)
+                                                                                                        
 将三个文件复制到对应的 Claude Code 配置目录：
 
 ```bash
