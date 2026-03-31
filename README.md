@@ -38,7 +38,7 @@ legal-doc-compare/
 3. 进入 **Customize → Skills → 点击 "+" 按钮**，上传 `doc-compare.md`
 4. 上传后即可在对话中通过关键词触发（见[使用方式](#使用方式)）
 
-> **注意**：桌面端 skill 不支持 `/doc-compare` 斜杠命令，仅支持关键词触发。验证脚本（`verify-doc-compare.py`）和 Playbook 比对功能在桌面端同样不可用，如需完整功能请使用方式二。
+> **注意**：桌面端 skill 可能不支持 `/doc-compare` 斜杠命令，仅支持关键词触发。验证脚本（`verify-doc-compare.py`）和 Playbook 比对功能在桌面端同样不可用，如需完整功能请使用方式二。
 
 ---
 
